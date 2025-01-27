@@ -8,9 +8,10 @@ def generate_attention_heatmap(text):
     try:
         tokens = text.split()
         n_tokens = len(tokens)
-        attention_weights = np.random.rand(n_tokens, n_tokens)
-
-        # Create figure
+        Q, K = embedding(text)
+        attention_unscaled = Q @ K.T
+        attention_weights = torch.softmax(attention_unscaled / sqrt(384), dim=-1)
+        attention_weights = attention_weights.numpy()
         fig = go.Figure()
 
         # Add heatmap
