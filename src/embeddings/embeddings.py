@@ -2,30 +2,28 @@ from sklearn.manifold import TSNE
 from sentence_transformers import SentenceTransformer
 import plotly.graph_objects as go
 
-# Load model
+# Load model once at import
 model = SentenceTransformer('all-MiniLM-L6-v2')
 
 def generate_embeddings(texts):
     """
-    Generate a 2D visualization of text embeddings with refined styling.
+    Generate a 2D t-SNE scatter plot from MiniLM embeddings.
     """
     try:
-        # Generate embeddings
+        # Encode texts
         embeddings = model.encode(texts)
         perplexity = min(30, len(texts) - 1)
+
+        # Reduce dimensionality
         tsne = TSNE(n_components=2, perplexity=perplexity, random_state=42)
         reduced_embeddings = tsne.fit_transform(embeddings)
         
-        # Calculate appropriate ranges with padding
         x_min, x_max = reduced_embeddings[:, 0].min(), reduced_embeddings[:, 0].max()
         y_min, y_max = reduced_embeddings[:, 1].min(), reduced_embeddings[:, 1].max()
         x_padding = (x_max - x_min) * 0.2
         y_padding = (y_max - y_min) * 0.2
-        
-        # Create figure
+
         fig = go.Figure()
-        
-        # Add scatter points
         fig.add_trace(go.Scatter(
             x=reduced_embeddings[:, 0],
             y=reduced_embeddings[:, 1],
@@ -44,8 +42,9 @@ def generate_embeddings(texts):
             )
         ))
 
-        # Update layout with increased margins
+        # Force a light background
         fig.update_layout(
+            template=None,
             title=dict(
                 text="Text Embedding Visualization",
                 font=dict(family="Inter", size=20, color="#333333"),
@@ -55,8 +54,8 @@ def generate_embeddings(texts):
             plot_bgcolor='white',
             paper_bgcolor='white',
             width=None,
-            height=700,  # Increased height
-            margin=dict(l=40, r=40, t=60, b=200),  # Increased bottom margin
+            height=700,
+            margin=dict(l=40, r=40, t=60, b=200),
             xaxis=dict(
                 title="Dimension 1",
                 gridcolor='#E0E0E0',
@@ -78,18 +77,17 @@ def generate_embeddings(texts):
             showlegend=False
         )
 
-        # Add description text at the bottom with more space
         fig.add_annotation(
-            text="<b>Understanding the Visualization:</b><br>" +
-                 "• Points that are closer together have similar meanings<br>" +
-                 "• Distance between points represents semantic difference<br>" +
+            text="<b>Understanding the Visualization:</b><br>"
+                 "• Points closer together often have similar meanings<br>"
+                 "• Distance roughly represents semantic difference<br>"
                  "• Clusters indicate groups of related concepts",
             align="left",
             showarrow=False,
             xref="paper",
             yref="paper",
             x=0,
-            y=-0.35,  # Moved lower
+            y=-0.35,
             bordercolor="#C48F8F",
             borderwidth=2,
             borderpad=10,
@@ -98,10 +96,15 @@ def generate_embeddings(texts):
         )
 
         return fig
+
     except Exception as e:
         fig = go.Figure()
         fig.update_layout(
-            title=dict(text="Error Generating Embeddings", font=dict(family="Inter", size=20, color="#D64545")),
+            template=None,
+            title=dict(
+                text="Error Generating Embeddings",
+                font=dict(family="Inter", size=20, color="#D64545"
+            )),
             height=700,
             annotations=[dict(
                 text=f"Error: {str(e)}",
