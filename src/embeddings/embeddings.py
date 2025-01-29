@@ -2,7 +2,7 @@ from sklearn.manifold import TSNE
 from sentence_transformers import SentenceTransformer
 import plotly.graph_objects as go
 
-# Load model once at import
+
 model = SentenceTransformer('all-MiniLM-L6-v2')
 
 def generate_embeddings(texts):
@@ -10,11 +10,11 @@ def generate_embeddings(texts):
     Generate a 2D t-SNE scatter plot from MiniLM embeddings.
     """
     try:
-        # Encode texts
+        #encode
         embeddings = model.encode(texts)
         perplexity = min(30, len(texts) - 1)
 
-        # Reduce dimensionality
+        #reduce dimensionality
         tsne = TSNE(n_components=2, perplexity=perplexity, random_state=42)
         reduced_embeddings = tsne.fit_transform(embeddings)
         
@@ -42,7 +42,6 @@ def generate_embeddings(texts):
             )
         ))
 
-        # Force a light background
         fig.update_layout(
             template=None,
             title=dict(
