@@ -88,7 +88,7 @@ def create_dashboard():
                         with gr.Column(elem_classes="input-container"):
                             text_input = gr.Textbox(
                                 lines=2,
-                                placeholder="Enter texts separated by commas (e.g. hello, goodbye, hey, bread)",
+                                placeholder="Enter texts separated by commas (e.g. blazer, elf, mage)",
                                 label="Enter Texts",
                                 elem_classes="textbox"
                             )
@@ -114,7 +114,7 @@ def create_dashboard():
                         with gr.Column(elem_classes="input-container"):
                             text_input = gr.Textbox(
                                 lines=2,
-                                placeholder="Enter a sentence (e.g. I love bread omg)",
+                                placeholder="Enter a sentence (e.g. I love toast with jam)",
                                 label="Enter a Sentence",
                                 elem_classes="textbox"
                             )
