@@ -4,7 +4,7 @@
 I put two main features in this repo:
 
 1. **Text Embeddings Visualization**  
-   - Using a SentenceTransformer (MiniLM-L6) to generate 384 dimensional text embeddings
+   - Using a SentenceTransformer (all-MiniLM-L6-v2) to generate 384 dimensional text embeddings
    - Then reducing these embeddings to 2D using t-SNE and display them with Plotly
    - The visualization helps you understand how similar or different certain words are
 <img width="694" alt="Screenshot 2025-01-29 at 12 52 55 AM" src="https://github.com/user-attachments/assets/ff7dac61-f9b3-4ce0-bc32-bcd64035f227" />
@@ -19,8 +19,8 @@ I put two main features in this repo:
 
 1. **Clone this repo**
    ```bash
-   git clone https://github.com/heyanuja/interactive-llm-explainability-dashboard.git
-   cd interactive-llm-explainability-dashboard
+   git clone https://github.com/heyanuja/llm-explainability-tool.git
+   cd llm-explainability-tool
    ```
 
 2. **Install the dependencies**
