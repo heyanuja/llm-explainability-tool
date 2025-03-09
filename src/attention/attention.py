@@ -49,23 +49,37 @@ def generate_attention_heatmap(text):
     """
     Generate a Plotly heatmap showing the final-layer attention from BERT.
     We remove [CLS]/[SEP] and strip '##' from subword tokens for readability.
+    
+    Note: BERT has a maximum token limit of 512 tokens.
     """
     try:
-        #get raw tokens + attention
+        # Input validation
+        if not text:
+            raise ValueError("No text provided for attention analysis")
+            
+        # Check if text might exceed BERT's token limit (512)
+        if len(text.split()) > 450:  # Conservative check
+            raise ValueError("Text is too long. BERT has a maximum limit of 512 tokens.")
+            
+        # Get raw tokens + attention
         tokens, attn_torch = _get_bert_attention(text)
 
         #convert to NumPy before slicing
         attn_weights = attn_torch.cpu().numpy()
 
-        original_tokens = tokens
-        keep_mask = [i for i, tok in enumerate(original_tokens)
+        # First identify which tokens to keep (removing special tokens)
+        keep_mask = [i for i, tok in enumerate(tokens)
                      if tok not in ("[CLS]", "[SEP]")]
 
-        #slice out [CLS]/[SEP] from attention matrix
+        # Filter out special tokens from the token list
+        filtered_tokens = [tokens[i] for i in keep_mask]
+        
+        # Clean the filtered tokens for display
+        display_tokens = _clean_bert_tokens(filtered_tokens)
+
+        # Filter the attention matrix to remove special tokens
         filtered_matrix = attn_weights[keep_mask, :][:, keep_mask]
-
-        display_tokens = _clean_bert_tokens(original_tokens)
-
+        
         attn_weights = filtered_matrix
 
         fig = go.Figure()

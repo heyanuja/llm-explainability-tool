@@ -10,13 +10,23 @@ def generate_embeddings(texts):
     Generate a 2D t-SNE scatter plot from MiniLM embeddings.
     """
     try:
-        #encode
+        # Input validation
+        if not texts:
+            raise ValueError("No texts provided for embedding generation")
+            
+        # Encode texts to embeddings
         embeddings = model.encode(texts)
-        perplexity = min(30, len(texts) - 1)
-
-        #reduce dimensionality
-        tsne = TSNE(n_components=2, perplexity=perplexity, random_state=42)
-        reduced_embeddings = tsne.fit_transform(embeddings)
+        
+        # t-SNE requires at least 2 samples, handle edge case
+        if len(texts) < 2:
+            # If only one text, create a simple 2D plot without t-SNE
+            reduced_embeddings = [[0, 0]]
+        else:
+            # Calculate appropriate perplexity (must be less than n_samples - 1)
+            perplexity = min(30, len(texts) - 1)
+            # Reduce dimensionality
+            tsne = TSNE(n_components=2, perplexity=perplexity, random_state=42)
+            reduced_embeddings = tsne.fit_transform(embeddings)
         
         x_min, x_max = reduced_embeddings[:, 0].min(), reduced_embeddings[:, 0].max()
         y_min, y_max = reduced_embeddings[:, 1].min(), reduced_embeddings[:, 1].max()

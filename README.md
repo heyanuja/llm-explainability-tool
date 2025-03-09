@@ -17,10 +17,31 @@ I put two main features in this repo:
 
 ## Installation & Usage
 
-1. **Clone this repo** 
+1. **Clone this repo**
+   ```bash
    git clone https://github.com/heyanuja/interactive-llm-explainability-dashboard.git
    cd interactive-llm-explainability-dashboard
+   ```
+
 2. **Install the dependencies**
+   ```bash
    pip install -r requirements.txt
-3. **Launch!!**
+   ```
+
+3. **Launch the dashboard**
+   ```bash
    python app.py
+   ```
+   
+## Limitations
+
+- **Text Embedding Visualization**:
+  - Requires at least one input text (comma-separated)
+  - Works best with 2-30 different text inputs for optimal t-SNE visualization
+  - Empty or whitespace-only inputs are filtered out automatically
+
+- **BERT Attention Heatmap**:
+  - Limited to 512 tokens maximum (BERT's limitation)
+  - Works best with shorter sentences (5-20 words) for clearer visualization
+  - Special tokens ([CLS], [SEP]) are automatically removed from the visualization
+  - Subword tokens (starting with ##) are cleaned for readability

@@ -97,7 +97,7 @@ def create_dashboard():
                                 variant="primary",
                                 size="sm"
                             ).click(
-                                lambda texts: generate_embeddings([t.strip() for t in texts.split(",")]),
+                                lambda texts: generate_embeddings([t.strip() for t in texts.split(",") if t.strip()]),
                                 inputs=text_input,
                                 outputs=embedding_plot
                             )
@@ -123,7 +123,7 @@ def create_dashboard():
                                 variant="primary",
                                 size="sm"
                             ).click(
-                                generate_attention_heatmap,
+                                lambda text: generate_attention_heatmap(text.strip()) if text.strip() else None,
                                 inputs=text_input,
                                 outputs=attention_plot
                             )
